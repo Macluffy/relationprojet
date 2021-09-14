@@ -38,10 +38,18 @@
             <td>{{$value->genre}} </td>
             <td>{{$value->pays}} </td>
             <td>{{$value->role->nom}} </td>
+
+            @if ($value->equipe == null)
+                <td><p>pas d'equipe</p></td>
+            @else
             <td>{{$value->equipe->nom}} </td>
-            <td>
-                <img src="{{$value->photo->nom}}" style="width: 50px;" alt="">
-            </td>
+            @endif
+            
+            @if (Storage::disk('public')->exists('img/' . $value->photo->nom))
+            <td><img style="width: 40px" src="{{ asset('img/' . $value->photo->nom) }}" alt=""></td>
+            @else
+            <td><img style="width: 40px" src="{{ $value->photo->nom }}" alt=""></td>
+            @endif
             <td class="d-flex">
                 <a href="{{route('joueurs.edit',$value->id)}} "><button class="btn btn-warning m-1">EDIT</button></a>
                 <a href="{{route('joueurs.show',$value->id)}} "><button class="btn btn-primary m-1">SHOW</button></a>

@@ -90,6 +90,7 @@
                 @foreach ($dataE as $value)
                 <option value="{{$value->id}} ">{{$value->nom}} </option>
                 @endforeach
+                <option value="">pas d'equipe </option>
                 
             </select>
 

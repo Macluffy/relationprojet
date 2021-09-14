@@ -13,9 +13,9 @@
 </div>
 @endif
 
-<h1 class="text-center m-3">Creer un joueur</h1>
+<h1 class="text-center m-3">Configurer un joueur</h1>
 
-<form  action="{{ route('joueurs.update', $joueur->id ) }}" method="post">
+<form  action="{{ route('joueurs.update', $joueur->id ) }}" method="post" enctype="multipart/form-data">
     @method('PUT')
     @csrf
     <div class="mb-3">
@@ -50,13 +50,13 @@
         <label  class="form-label fw-bold">Genre</label>
         <div class="d-flex">
             <div class="form-check m-2">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="genre">
+            <input class="form-check-input" type="radio" value="male" id="flexCheckDefault" name="genre">
             <label class="form-check-label" for="flexCheckDefault">
                 male
             </label>
         </div>
         <div class="form-check m-2">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"  name="genre">
+            <input class="form-check-input" type="radio" value="female" id="flexCheckChecked"  name="genre">
             <label class="form-check-label" for="flexCheckChecked">
                 female
             </label>
@@ -70,14 +70,9 @@
     
     
     <div class="mb-3">
-    <label  class="form-label fw-bold">Photo</label>
-    <select class="form-select  " style="width: 10%" aria-label="Default select example" name="photo_id">
-        
-        @foreach ($dataP as $value)
-        <option value="{{$value->id}} ">{{$value->nom}} </option>
-        @endforeach
-        
-    </select>
+        <label  class="form-label fw-bold">Photo</label>
+        <input type="file" class="form-control w-25" name="image"  placeholder="image" value="{{ $joueur->photo->nom }}">
+    </div>
 
     <div class="mb-3">
         <label  class="form-label fw-bold">Role</label>
@@ -96,6 +91,7 @@
                 @foreach ($dataE as $value)
                 <option value="{{$value->id}} ">{{$value->nom}} </option>
                 @endforeach
+                <option value="">pas d'equipe </option>
                 
             </select>
 

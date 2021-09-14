@@ -11,6 +11,7 @@ class HomeController extends Controller
 {
     public function index() {
         $dataE = Equipe::all();
+        
         $dataJ = Joueur::all();
         return view('pages.home',compact('dataE','dataJ'));
     }

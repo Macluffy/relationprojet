@@ -15,7 +15,7 @@
 
 <h1 class="text-center m-3">configuration de l'equipe</h1>
 
-<form  action="{{ route('equipes.update', $equipe->id ) }}" method="post">
+<form  action="{{ route('equipes.update', $equipe->id ) }}" method="post" >
     @csrf
     @method('PUT')
     <div class="mb-3">

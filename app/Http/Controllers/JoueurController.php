@@ -8,6 +8,7 @@ use App\Models\Photo;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class JoueurController extends Controller
 {
@@ -29,10 +30,10 @@ class JoueurController extends Controller
      */
     public function create()
     {
-        $dataP=Photo::all();
+        
         $dataR=Role::all();
         $dataE=Equipe::all();
-        return view('layoutsJ.create',compact('dataP','dataR','dataE'));
+        return view('layoutsJ.create',compact('dataR','dataE'));
     }
 
     /**
@@ -52,7 +53,7 @@ class JoueurController extends Controller
             "genre"=>["required","min:1","max:200"],
             "pays"=>["required","min:1","max:200"],
             "role_id"=>["required","min:1","max:200"],
-            "equipe_id"=>["required","min:1","max:200"],
+            // "equipe_id"=>["required","min:1","max:200"],
         ]);
         $data = new Joueur;
         $data->nom = $request->nom;
@@ -92,10 +93,10 @@ class JoueurController extends Controller
      */
     public function edit(Joueur $joueur)
     {
-        $dataP=Photo::all();
+        
         $dataR=Role::all();
         $dataE=Equipe::all();
-        return view('layoutsJ.edit',compact('joueur','dataP','dataR','dataE',));
+        return view('layoutsJ.edit',compact('joueur','dataR','dataE',));
     }
 
     /**
@@ -116,7 +117,7 @@ class JoueurController extends Controller
             "genre"=>["required","min:1","max:200"],
             "pays"=>["required","min:1","max:200"],
             "role_id"=>["required","min:1","max:200"],
-            "equipe_id"=>["required","min:1","max:200"],
+            // "equipe_id"=>["required","min:1","max:200"],
         ]);
 
         
@@ -128,8 +129,14 @@ class JoueurController extends Controller
         $joueur->genre = $request->genre;
         $joueur->pays = $request->pays;
         $joueur->role_id = $request->role_id;
-        $joueur->equipe_id = $request->equipe_id;
+        $joueur->equipe_id = $request->equipe_id;  
         $joueur->save();
+        $photo = Photo::find($joueur->photo->id);
+        Storage::disk('public')->delete('img/'. $photo->nom);
+        $photo->nom = $request->file('image')->hashName();
+        $photo->joueur_id = $joueur->id;
+        $photo->save();
+        $request->file('image')->storePublicly('img','public');
 
         return redirect()->route('joueurs.index');
     }
@@ -140,8 +147,12 @@ class JoueurController extends Controller
      * @param  \App\Models\Joueur  $joueur
      * @return \Illuminate\Http\Response
      */
+    
     public function destroy(Joueur $joueur)
     {
+
+        $photo = Photo::find($joueur->photo->id);
+        Storage::disk('public')->delete('img/'. $photo->nom);
         $joueur->delete();
         return redirect()->route('joueurs.index');
 
